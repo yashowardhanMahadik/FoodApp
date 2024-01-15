@@ -25,17 +25,17 @@ public class OrderServiceImpl implements OrderService{
         this.restaurantRepository=restaurantRepository;
     }
 
-//    @Override
-//    public OrderDetail getOrder(Long orderId, Long userId) {
-//        try {
-//
-//            return orderRepository.findByOrderIdAndUserId(orderId, userId);
-//        } catch (Exception e) {
-//            // print error msg
-//        }
-//        return null;
-//
-//    }
+    @Override
+    public OrderDetail getOrder(Long orderId, Long userId) {
+        try {
+
+            return orderRepository.findByOrderIdAndUserId(orderId, userId);
+        } catch (Exception e) {
+            // print error msg
+        }
+        return null;
+
+    }
     @Override
     public OrderDetail getOrder(Long orderId) {
         try {
@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
         Arrays.stream(foodItems).forEach(foodItem -> {
 
                     FoodItem item = foodItemService.getFoodItemByID(Long.parseLong(foodItem));
-                    item.setStock(item.getStock() - 1);
+                    item.setSupply(item.getSupply() - 1);
                     foodItemService.saveItem(item);
                 }
         );
@@ -84,5 +84,11 @@ public class OrderServiceImpl implements OrderService{
             // print message
         }
         return false;
+    }
+    @Override
+    public boolean sendNotification(long orderId) {
+        // fetch order details
+        // use notification service by email or push notifications
+        return true;
     }
 }

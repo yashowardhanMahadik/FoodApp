@@ -21,6 +21,7 @@ public class Payment {
 
     double amountPaid;
     long date;
+    boolean payStatus;
 
 
 }

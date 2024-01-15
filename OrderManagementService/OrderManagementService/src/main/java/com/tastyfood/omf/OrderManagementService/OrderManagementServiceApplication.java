@@ -37,9 +37,9 @@ public class OrderManagementServiceApplication implements CommandLineRunner {
 
 		List<FoodItem> iteneraryList = new ArrayList<>();
 		iteneraryList.add(FoodItem.builder().foodName("Pav Bhaji").restaurant(restaurant1).cuisine(Cuisine.AMERICAN)
-				.price(100d).stock(50).build());
+				.price(100d).supply(50).build());
 		iteneraryList.add(FoodItem.builder().foodName("Chicken Mughalai").restaurant(restaurant1).cuisine(Cuisine.CONTINENTAL
-				).price(400d).stock(50).build());
+				).price(400d).supply(50).build());
 		foodItemRepository.saveAll(iteneraryList);
 //		FoodItem food = new FoodItem(1,"ab",35,50,Cuisine.AMERICAN,restaurant1);
 //		foodItemRepository.save(food);
@@ -48,21 +48,21 @@ public class OrderManagementServiceApplication implements CommandLineRunner {
 		restaurant1 = new Restaurant("Hotel sRk ", "gujarat", 0.4, 150d);
 		restaurantRepository.save(restaurant1);
 		iteneraryList.add(FoodItem.builder().foodName("daal Khichdi").restaurant(restaurant1).cuisine(Cuisine.INDIAN
-				).price(150d).stock(50).build());
+				).price(150d).supply(50).build());
 		iteneraryList.add(FoodItem.builder().foodName("roti sabji").restaurant(restaurant1).cuisine(Cuisine.AMERICAN
-				).price(100d).stock(50).build());
+				).price(100d).supply(50).build());
 		foodItemRepository.saveAll(iteneraryList);
 		iteneraryList.clear();
 
-		restaurant1 = new Restaurant("Gujarat Snacks", "gujarat", 0.6, 100d);
+		restaurant1 = new Restaurant("Udupi", "Karnataka", 0.6, 100d);
 		restaurantRepository.save(restaurant1);
 
 		iteneraryList.add(FoodItem.builder().foodName("Dhokla").price(40d).restaurant(restaurant1).cuisine(Cuisine.INDIAN
-				).stock(50).build());
+				).supply(50).build());
 		iteneraryList.add(FoodItem.builder().foodName("Masala Dosa").restaurant(restaurant1).cuisine(Cuisine.INDIAN
-				).price(70d).stock(50).build());
-		iteneraryList.add(FoodItem.builder().foodName("Idli").restaurant(restaurant1).cuisine(Cuisine.INDIAN
-				).price(50d).stock(50).build());
+				).price(70d).supply(50).build());
+		iteneraryList.add(FoodItem.builder().foodName("Idly").restaurant(restaurant1).cuisine(Cuisine.INDIAN
+				).price(50d).supply(50).build());
 		foodItemRepository.saveAll(iteneraryList);
 		iteneraryList.clear();
 

@@ -1,13 +1,15 @@
 package com.tastyfood.omf.OrderManagementService.controller;
 
-import com.tastyfood.omf.OrderManagementService.model.Payment;
-import com.tastyfood.omf.OrderManagementService.model.OrderDetail;
+import com.tastyfood.omf.OrderManagementService.model.*;
+import com.tastyfood.omf.OrderManagementService.service.FoodItemService;
 import com.tastyfood.omf.OrderManagementService.service.OrderServiceImpl;
+import com.tastyfood.omf.OrderManagementService.service.PaymentService;
+import com.tastyfood.omf.OrderManagementService.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.Random;
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -16,16 +18,26 @@ public class OrderManagementController {
     @Autowired
     OrderServiceImpl orderService;
 
+    @Autowired
+    RestaurantService restaurantService;
+    @Autowired
+    FoodItemService foodItemService;
+
+    @Autowired
+    PaymentService paymentService;
+
 
 
     @PostMapping(value = "/place-order/{paymentMode}")
     public boolean placeOrder(@RequestBody OrderDetail orderDetail, @PathVariable String paymentMode) {
         String[] items = orderDetail.getFoodItems().trim().split(",");
+        Payment payment = orderDetail.getPayment();
         if (orderDetail.getFoodItems().trim().length() > 1 && items.length > 0) {
-            boolean isPaymentSuccess = processPayment(orderDetail, paymentMode);
+            boolean isPaymentSuccess = paymentService.processPayment(orderDetail, paymentMode, payment);
             if (!isPaymentSuccess)
                 return false;
             orderService.addOrder(orderDetail);
+            orderService.sendNotification(orderDetail.getOrderId());
             return true;
         } else
             return false;
@@ -47,21 +59,19 @@ public class OrderManagementController {
     public boolean updateOrder(@RequestBody OrderDetail orderDetail, @PathVariable String paymentMode){
         return orderService.updateOrder(orderDetail,paymentMode);
     }
+    @GetMapping(value = "/getRests")
+    public List<Restaurant> getAllRestaurants(){
+        return restaurantService.getRestaurants();
+    }
 
+    @GetMapping(value = "/getRestFoods/{restid}")
+    public List<FoodItem> getRestFoodItems(@PathVariable Long restid){
+        return foodItemService.findFoodItemByRestaurantID(restid);
+    }
 
-    private boolean processPayment(OrderDetail orderDetail, String paymentMode) {
-        String[] paymentModes = {"Cash", "Upi", "Credit Card", "Debit Card"};
-        Random random = new Random();
-        int num = random.nextInt(10);
-        if (num < 9 || paymentMode.equals(paymentModes[0])) {
-            Payment payment = Payment.builder().paymentMode(paymentMode)
-                    .amountPaid(orderDetail.getAmountToBePaid())
-                    .date(new Date().getTime()).build();
-            orderDetail.setPayment(payment);
-            return true;
-        }
-
-        return false;
+    @GetMapping("/getCuisineFood/{cuisine}")
+    public List<FoodItem> getFoodByCuisine(@PathVariable Cuisine cuisine){
+        return foodItemService.findFoodItemByCuisine(cuisine);
     }
 
     public static OrderDetail getDemoOrderDetail(){

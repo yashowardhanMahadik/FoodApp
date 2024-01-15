@@ -1,5 +1,6 @@
 package com.tastyfood.omf.OrderManagementService.service;
 
+import com.tastyfood.omf.OrderManagementService.model.Cuisine;
 import com.tastyfood.omf.OrderManagementService.model.FoodItem;
 import com.tastyfood.omf.OrderManagementService.model.Restaurant;
 import com.tastyfood.omf.OrderManagementService.repository.FoodItemRepository;
@@ -19,9 +20,13 @@ public class FoodItemServiceImpl implements FoodItemService {
     }
 
     @Override
-    public List<FoodItem> findFoodItemByRestaurantID(Restaurant restaurant) {
+    public List<FoodItem> findFoodItemByRestaurantID(Long restaurantId) {
+       return foodItemRepository.findFoodItemByRestaurant(Restaurant.builder().id(restaurantId).build());
+    }
 
-       return foodItemRepository.findFoodItemByRestaurant(restaurant);
+    @Override
+    public List<FoodItem> findFoodItemByCuisine(Cuisine cuisine) {
+        return foodItemRepository.findFoodItemByCuisine(cuisine);
     }
 
     @Override

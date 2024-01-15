@@ -20,7 +20,7 @@ public class FoodItem {
     String foodName;
 
     double price;
-    int stock=50;
+    int supply =50;
 
     Cuisine cuisine;
 
@@ -36,7 +36,7 @@ public class FoodItem {
                 ", foodName='" + foodName + '\'' +
                 ", price=" + price +
                 ", cuisine=" + cuisine +
-                ", stock=" + stock +
+                ", remaining supply=" + supply +
                 ", restaurant=" + restaurant.toString() +
                 '}';
     }
