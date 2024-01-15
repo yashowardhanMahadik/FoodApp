@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: Gateway_Service
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: Restaurant_Search_Service
+#          uri: lb://restaurant-search-service
+#          predicates:
+#            - Path=/ordermyfood/**
+#        - id: Order_Management_Service
+#          uri: lb://order-management-service
+#          predicates:
+#            - Path=/order/**
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+server:
+  port: 8762
