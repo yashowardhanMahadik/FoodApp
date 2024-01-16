@@ -13,7 +13,6 @@ public interface RestaurantService {
 
      List<Restaurant> searchRestaurant(String input);
 
-     List<Restaurant> getRestaurantByCuisineName(String input);
-
     List<Restaurant> getRestaurantNearByUserLoc();
+    List<Restaurant> getRestaurants();
 }

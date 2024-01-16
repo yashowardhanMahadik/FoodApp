@@ -1,14 +1,10 @@
 package com.tastyfood.omf.RestaurantSearchService.controller;
 
-import com.tastyfood.omf.RestaurantSearchService.model.OrderDetail;
-import com.tastyfood.omf.RestaurantSearchService.model.Payment;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class RestaurantControllerTest {

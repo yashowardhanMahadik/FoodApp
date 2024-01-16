@@ -1,7 +1,9 @@
 package com.tastyfood.omf.RestaurantSearchService;
 
-import com.tastyfood.omf.RestaurantSearchService.model.*;
-import com.tastyfood.omf.RestaurantSearchService.repository.CuisineRepository;
+import com.tastyfood.omf.RestaurantSearchService.model.Cuisine;
+import com.tastyfood.omf.RestaurantSearchService.model.FoodItem;
+import com.tastyfood.omf.RestaurantSearchService.model.Restaurant;
+import com.tastyfood.omf.RestaurantSearchService.repository.FoodItemRepository;
 import com.tastyfood.omf.RestaurantSearchService.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -12,66 +14,67 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
 public class RestaurantSearchServiceApplication implements CommandLineRunner {
 
 	@Autowired
-	CuisineRepository cuisineRepository;
-
-	@Autowired
 	RestaurantRepository restaurantRepository;
+	@Autowired
+	FoodItemRepository foodItemRepository;
 
 
 	public static void main(String[] args) {
 		SpringApplication.run(RestaurantSearchServiceApplication.class, args);
 	}
 
-	@Bean
-	@LoadBalanced
-	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
-	}
-
 	@Override
 	public void run(String... args) throws Exception {
 
-		Restaurant restaurant1 = new Restaurant("KFC", "Bengaluru", 0.25, 100d);
+		Restaurant restaurant1 = new Restaurant("Zaayka", "Mumbai", 0.25, 100);
 		restaurantRepository.save(restaurant1);
 
-		List<Cuisine> cuisineList = new ArrayList<>();
 
-		cuisineList.add(Cuisine.builder().restaurant(restaurant1).name("Indian").build());
-		cuisineList.add(Cuisine.builder().restaurant(restaurant1).name("American").build());
-		cuisineList.add(Cuisine.builder().restaurant(restaurant1).name("Italian").build());
-		cuisineList.add(Cuisine.builder().restaurant(restaurant1).name("Chinese").build());
-		cuisineRepository.saveAll(cuisineList);
-		cuisineList.clear();
+		List<FoodItem> iteneraryList = new ArrayList<>();
+		iteneraryList.add(FoodItem.builder().foodName("Pav Bhaji").restaurant(restaurant1).cuisine(Cuisine.AMERICAN)
+				.price(100d).supply(50).build());
+		iteneraryList.add(FoodItem.builder().foodName("Chicken Mughalai").restaurant(restaurant1).cuisine(Cuisine.CONTINENTAL
+		).price(400d).supply(50).build());
+		foodItemRepository.saveAll(iteneraryList);
+		iteneraryList.clear();
 
-		restaurant1 = new Restaurant("gujarat Snacks", "Delhi", 3, 200d);
+		restaurant1 = new Restaurant("Truffles", "Bengaluru", 0.4, 150d);
+		restaurantRepository.save(restaurant1);
+		iteneraryList.add(FoodItem.builder().foodName("Chicken Rooster Burger").restaurant(restaurant1).cuisine(Cuisine.INDIAN
+		).price(150d).supply(50).build());
+		iteneraryList.add(FoodItem.builder().foodName("Pasta").restaurant(restaurant1).cuisine(Cuisine.AMERICAN
+		).price(100d).supply(50).build());
+		foodItemRepository.saveAll(iteneraryList);
+		iteneraryList.clear();
+
+		restaurant1 = new Restaurant("Udupi", "Bengaluru", 0.6, 100d);
 		restaurantRepository.save(restaurant1);
 
-		restaurant1 = new Restaurant("Gujarat Snacks", "Bihar", 4, 200d);
+		iteneraryList.add(FoodItem.builder().foodName("Dhokla").price(40d).restaurant(restaurant1).cuisine(Cuisine.INDIAN
+		).supply(50).build());
+		iteneraryList.add(FoodItem.builder().foodName("Masala Dosa").restaurant(restaurant1).cuisine(Cuisine.INDIAN
+		).price(70d).supply(50).build());
+		iteneraryList.add(FoodItem.builder().foodName("Idly").restaurant(restaurant1).cuisine(Cuisine.INDIAN
+		).price(50d).supply(50).build());
+		foodItemRepository.saveAll(iteneraryList);
+		iteneraryList.clear();
+
+		restaurant1 = new Restaurant("Natraj Chole", "Delhi", 3, 200d);
 		restaurantRepository.save(restaurant1);
 
+		restaurant1 = new Restaurant("Litti House", "Bihar", 4, 200d);
+		restaurantRepository.save(restaurant1);
+		restaurant1 = new Restaurant("Sky Garden", "Bengaluru", 4, 200d);
+		restaurantRepository.save(restaurant1);
+		restaurant1 = new Restaurant("Kapoors Cafe", "Mumbai", 4, 200d);
+		restaurantRepository.save(restaurant1);
 
 	}
 
-	public static OrderDetail getDemoOrderDetail(){
-
-
-		Payment payment = Payment.builder().paymentMode("Upi")
-				.date(new Date().getTime())
-				.amountPaid(255d).build();
-
-		OrderDetail orderDetail= OrderDetail.builder()
-				.amountToBePaid(255)
-				.payment(payment)
-				.foodItems("10,22,12")
-				.restId(11)
-				.userId(2).build();
-		return orderDetail;
-	}
 }

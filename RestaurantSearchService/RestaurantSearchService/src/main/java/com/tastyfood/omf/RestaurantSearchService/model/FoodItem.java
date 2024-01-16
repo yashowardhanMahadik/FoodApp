@@ -11,40 +11,32 @@ import java.util.Objects;
 @Getter
 @Setter
 @Builder
-public class Itenerary {
+public class FoodItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    long foodId;
 
     @Column(name = "food_name")
     String foodName;
 
     double price;
+    int supply =50;
 
-    @OneToOne()
-    @JoinColumn(name = "cuisine_id",referencedColumnName = "id")
     Cuisine cuisine;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id",referencedColumnName = "id")
+    @JoinColumn(name = "restaurant_id",
+            referencedColumnName = "id")
     Restaurant restaurant;
 
-    int stock=50;
-
-    public Itenerary(String foodName, double price, Cuisine cuisine, Restaurant restaurant, int stock) {
-        this.foodName = foodName;
-        this.price = price;
-        this.cuisine = cuisine;
-        this.restaurant = restaurant;
-        this.stock = stock;
-    }
     @Override
     public String toString() {
-        return "IteneraryService{" +
-                "foodId=" + id +
+        return "FoodItem{" +
+                "foodId=" + foodId +
                 ", foodName='" + foodName + '\'' +
                 ", price=" + price +
                 ", cuisine=" + cuisine +
+                ", remaining supply=" + supply +
                 ", restaurant=" + restaurant.toString() +
                 '}';
     }
@@ -53,12 +45,12 @@ public class Itenerary {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Itenerary itenerary = (Itenerary) o;
-        return id == itenerary.id;
+        FoodItem foodItem = (FoodItem) o;
+        return foodId == foodItem.foodId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(foodId);
     }
 }

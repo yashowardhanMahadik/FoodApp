@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+      - id: ORDER-SERVICE
+        uri: lb://ORDER-SERVICE
+        predicates:
+          - Path=/order/**
+      - id: RESTAURANT-SEARCH-SERVICE
+        uri: lb://RESTAURANT-SEARCH-SERVICE
+        predicates:
+          - Path=/restaurant/**
+
+
+#eureka: (SEE Application Properties)
+##  instance:
+##    hostname: localhost
+#  client:
+##    register-with-eureka: false
+##    fetch-registry: false
+##    service-url:
+##      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#server:
+#  port: 8761
