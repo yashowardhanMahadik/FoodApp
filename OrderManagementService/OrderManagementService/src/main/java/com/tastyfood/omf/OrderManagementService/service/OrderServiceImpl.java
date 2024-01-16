@@ -1,11 +1,10 @@
 package com.tastyfood.omf.OrderManagementService.service;
 
-import com.tastyfood.omf.OrderManagementService.model.FoodItem;
 import com.tastyfood.omf.OrderManagementService.model.OrderDetail;
 import com.tastyfood.omf.OrderManagementService.repository.OrderRepository;
-import com.tastyfood.omf.OrderManagementService.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 
@@ -13,17 +12,11 @@ import java.util.Arrays;
 @Service
 public class OrderServiceImpl implements OrderService{
 
-    private RestaurantRepository restaurantRepository;
-    private final OrderRepository orderRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Autowired
-    FoodItemService foodItemService;
-
-    @Autowired
-    OrderServiceImpl(OrderRepository orderRepository, RestaurantRepository restaurantRepository) {
-        this.orderRepository = orderRepository;
-        this.restaurantRepository=restaurantRepository;
-    }
+    RestTemplate restTemplate;
 
     @Override
     public OrderDetail getOrder(Long orderId, Long userId) {
@@ -51,10 +44,11 @@ public class OrderServiceImpl implements OrderService{
     public void addOrder(OrderDetail orderDetail) {
         String[] foodItems = orderDetail.getFoodItems().trim().split(",");
         Arrays.stream(foodItems).forEach(foodItem -> {
-
-                    FoodItem item = foodItemService.getFoodItemByID(Long.parseLong(foodItem));
-                    item.setSupply(item.getSupply() - 1);
-                    foodItemService.saveItem(item);
+                // call rest template here
+                restTemplate.getForObject("http://RESTAURANT-SEARCH-SERVICE/restaurant/reduceStock/"+ Long.parseLong(foodItem),Boolean.class);
+//                    FoodItem item = foodItemService.getFoodItemByID(Long.parseLong(foodItem));
+//                    item.setSupply(item.getSupply() - 1);
+//                    foodItemService.saveItem(item);
                 }
         );
 
@@ -65,10 +59,13 @@ public class OrderServiceImpl implements OrderService{
     public Boolean updateOrder(OrderDetail orderDetail, String paymentMode) {
 
         double amount = 0;
-        if (orderDetail.getFoodItems().trim().length() > 1) {
-            amount = Arrays.stream(orderDetail.getFoodItems().trim().split(",")).map(item ->
-                    foodItemService.getFoodItemByID(Long.parseLong(item))).mapToDouble(foodItem -> foodItem.getPrice()).sum();
-        }
+        // Call rest template
+//        if (orderDetail.getFoodItems().trim().length() > 1) {
+//            amount = Arrays.stream(orderDetail.getFoodItems().trim().split(",")).map(item ->
+//                    //call rest template
+//                    foodItemService.getFoodItemByID(Long.parseLong(item)
+//                    )).mapToDouble(foodItem -> foodItem.getPrice()).sum();
+//        }
         orderDetail.setAmountToBePaid(amount);
         orderRepository.save(orderDetail);
 
